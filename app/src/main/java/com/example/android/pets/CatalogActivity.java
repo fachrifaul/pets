@@ -171,6 +171,11 @@ public class CatalogActivity extends AppCompatActivity {
         long newRowId = db.insert(PetEntry.TABLE_NAME, null, values);
     }
 
+    private void deletePet() {
+        SQLiteDatabase db = mDbHelper.getWritableDatabase();
+        db.delete(PetEntry.TABLE_NAME, null, null);
+    }
+
     @Override
     protected void onStart() {
         super.onStart();
@@ -198,6 +203,8 @@ public class CatalogActivity extends AppCompatActivity {
             // Respond to a click on the "Delete all entries" menu option
             case R.id.action_delete_all_entries:
                 // Do nothing for now
+                deletePet();
+                displayDatabaseInfo();
                 return true;
         }
         return super.onOptionsItemSelected(item);
