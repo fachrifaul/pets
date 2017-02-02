@@ -26,6 +26,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import com.testfairy.TestFairy;
 
 import com.example.android.pets.PetContract.PetEntry;
 
@@ -44,6 +45,9 @@ public class CatalogActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_catalog);
+        
+        TestFairy.begin(this, "9617f98d71bce2aaf172ecdf4104eda5a6fe66c4"); 
+
 
         // To access our database, we instantiate our subclass of SQLiteOpenHelper
         // and pass the context, which is the current activity.
