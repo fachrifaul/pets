@@ -1,4 +1,4 @@
-package com.example.android.pets;
+package com.fachri.makers.pets;
 
 import android.provider.BaseColumns;
 

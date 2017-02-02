@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.android.pets;
+package com.fachri.makers.pets;
 
 import android.content.ContentValues;
 import android.content.Intent;
@@ -26,9 +26,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import com.testfairy.TestFairy;
 
-import com.example.android.pets.PetContract.PetEntry;
+import com.testfairy.TestFairy;
 
 
 /**
@@ -75,15 +74,15 @@ public class CatalogActivity extends AppCompatActivity {
         // Define a projection that specifies which columns from the database
         // you will actually use after this query.
         String[] projection = {
-                PetEntry._ID,
-                PetEntry.COLUMN_PET_NAME,
-                PetEntry.COLUMN_PET_BREED,
-                PetEntry.COLUMN_PET_GENDER,
-                PetEntry.COLUMN_PET_WEIGHT};
+                PetContract.PetEntry._ID,
+                PetContract.PetEntry.COLUMN_PET_NAME,
+                PetContract.PetEntry.COLUMN_PET_BREED,
+                PetContract.PetEntry.COLUMN_PET_GENDER,
+                PetContract.PetEntry.COLUMN_PET_WEIGHT};
 
         // Perform a query on the pets table
         Cursor cursor = db.query(
-                PetEntry.TABLE_NAME,   // The table to query
+                PetContract.PetEntry.TABLE_NAME,   // The table to query
                 projection,            // The columns to return
                 null,                  // The columns for the WHERE clause
                 null,                  // The values for the WHERE clause
@@ -102,18 +101,18 @@ public class CatalogActivity extends AppCompatActivity {
             // In the while loop below, iterate through the rows of the cursor and display
             // the information from each column in this order.
             displayView.setText("The pets table contains " + cursor.getCount() + " pets.\n\n");
-            displayView.append(PetEntry._ID + " - " +
-                    PetEntry.COLUMN_PET_NAME + " - " +
-                    PetEntry.COLUMN_PET_BREED + " - " +
-                    PetEntry.COLUMN_PET_GENDER + " - " +
-                    PetEntry.COLUMN_PET_WEIGHT + "\n");
+            displayView.append(PetContract.PetEntry._ID + " - " +
+                    PetContract.PetEntry.COLUMN_PET_NAME + " - " +
+                    PetContract.PetEntry.COLUMN_PET_BREED + " - " +
+                    PetContract.PetEntry.COLUMN_PET_GENDER + " - " +
+                    PetContract.PetEntry.COLUMN_PET_WEIGHT + "\n");
 
             // Figure out the index of each column
-            int idColumnIndex = cursor.getColumnIndex(PetEntry._ID);
-            int nameColumnIndex = cursor.getColumnIndex(PetEntry.COLUMN_PET_NAME);
-            int breedColumnIndex = cursor.getColumnIndex(PetEntry.COLUMN_PET_BREED);
-            int genderColumnIndex = cursor.getColumnIndex(PetEntry.COLUMN_PET_GENDER);
-            int weightColumnIndex = cursor.getColumnIndex(PetEntry.COLUMN_PET_WEIGHT);
+            int idColumnIndex = cursor.getColumnIndex(PetContract.PetEntry._ID);
+            int nameColumnIndex = cursor.getColumnIndex(PetContract.PetEntry.COLUMN_PET_NAME);
+            int breedColumnIndex = cursor.getColumnIndex(PetContract.PetEntry.COLUMN_PET_BREED);
+            int genderColumnIndex = cursor.getColumnIndex(PetContract.PetEntry.COLUMN_PET_GENDER);
+            int weightColumnIndex = cursor.getColumnIndex(PetContract.PetEntry.COLUMN_PET_WEIGHT);
 
             // Iterate through all the returned rows in the cursor
             while (cursor.moveToNext()) {
@@ -140,9 +139,9 @@ public class CatalogActivity extends AppCompatActivity {
 
     private String isGender(int selection) {
         String mGender;
-        if (selection == PetEntry.GENDER_MALE) {
+        if (selection == PetContract.PetEntry.GENDER_MALE) {
             mGender = getString(R.string.gender_male);
-        } else if (selection == PetEntry.GENDER_FEMALE) {
+        } else if (selection == PetContract.PetEntry.GENDER_FEMALE) {
             mGender = getString(R.string.gender_female);
         } else {
             mGender = getString(R.string.gender_unknown);
@@ -160,10 +159,10 @@ public class CatalogActivity extends AppCompatActivity {
         // Create a ContentValues object where column names are the keys,
         // and Toto's pet attributes are the values.
         ContentValues values = new ContentValues();
-        values.put(PetEntry.COLUMN_PET_NAME, "Toto");
-        values.put(PetEntry.COLUMN_PET_BREED, "Terrier");
-        values.put(PetEntry.COLUMN_PET_GENDER, PetEntry.GENDER_MALE);
-        values.put(PetEntry.COLUMN_PET_WEIGHT, 7);
+        values.put(PetContract.PetEntry.COLUMN_PET_NAME, "Toto");
+        values.put(PetContract.PetEntry.COLUMN_PET_BREED, "Terrier");
+        values.put(PetContract.PetEntry.COLUMN_PET_GENDER, PetContract.PetEntry.GENDER_MALE);
+        values.put(PetContract.PetEntry.COLUMN_PET_WEIGHT, 7);
 
         // Insert a new row for Toto in the database, returning the ID of that new row.
         // The first argument for db.insert() is the pets table name.
@@ -172,12 +171,12 @@ public class CatalogActivity extends AppCompatActivity {
         // this is set to "null", then the framework will not insert a row when
         // there are no values).
         // The third argument is the ContentValues object containing the info for Toto.
-        long newRowId = db.insert(PetEntry.TABLE_NAME, null, values);
+        long newRowId = db.insert(PetContract.PetEntry.TABLE_NAME, null, values);
     }
 
     private void deletePet() {
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
-        db.delete(PetEntry.TABLE_NAME, null, null);
+        db.delete(PetContract.PetEntry.TABLE_NAME, null, null);
     }
 
     @Override

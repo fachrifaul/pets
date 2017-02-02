@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.android.pets;
+package com.fachri.makers.pets;
 
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
@@ -29,8 +29,6 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
-
-import com.example.android.pets.PetContract.PetEntry;
 
 
 /**
@@ -138,13 +136,13 @@ public class EditorActivity extends AppCompatActivity {
         // Create a ContentValues object where column names are the keys,
         // and pet attributes from the editor are the values.
         ContentValues values = new ContentValues();
-        values.put(PetEntry.COLUMN_PET_NAME, nameString);
-        values.put(PetEntry.COLUMN_PET_BREED, breedString);
-        values.put(PetEntry.COLUMN_PET_GENDER, mGender);
-        values.put(PetEntry.COLUMN_PET_WEIGHT, weight);
+        values.put(PetContract.PetEntry.COLUMN_PET_NAME, nameString);
+        values.put(PetContract.PetEntry.COLUMN_PET_BREED, breedString);
+        values.put(PetContract.PetEntry.COLUMN_PET_GENDER, mGender);
+        values.put(PetContract.PetEntry.COLUMN_PET_WEIGHT, weight);
 
         // Insert a new row for pet in the database, returning the ID of that new row.
-        long newRowId = db.insert(PetEntry.TABLE_NAME, null, values);
+        long newRowId = db.insert(PetContract.PetEntry.TABLE_NAME, null, values);
 
         // Show a toast message depending on whether or not the insertion was successful
         if (newRowId == -1) {
