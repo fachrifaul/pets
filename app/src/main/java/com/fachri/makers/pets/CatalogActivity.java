@@ -1,24 +1,9 @@
-/*
- * Copyright (C) 2016 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-package com.example.android.pets;
+package com.fachri.makers.pets;
 
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -26,9 +11,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import com.testfairy.TestFairy;
 
-import com.example.android.pets.PetContract.PetEntry;
+import com.fachri.makers.pets.PetContract.PetEntry;
+import com.testfairy.TestFairy;
 
 
 /**
@@ -45,8 +30,8 @@ public class CatalogActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_catalog);
-        
-        TestFairy.begin(this, "9617f98d71bce2aaf172ecdf4104eda5a6fe66c4"); 
+
+        TestFairy.begin(this, "9617f98d71bce2aaf172ecdf4104eda5a6fe66c4");
 
 
         // To access our database, we instantiate our subclass of SQLiteOpenHelper
@@ -69,27 +54,26 @@ public class CatalogActivity extends AppCompatActivity {
      * the pets database.
      */
     private void displayDatabaseInfo() {
-        // Create and/or open a database to read from it
-        SQLiteDatabase db = mDbHelper.getReadableDatabase();
+
 
         // Define a projection that specifies which columns from the database
         // you will actually use after this query.
         String[] projection = {
-                PetEntry._ID,
-                PetEntry.COLUMN_PET_NAME,
-                PetEntry.COLUMN_PET_BREED,
-                PetEntry.COLUMN_PET_GENDER,
-                PetEntry.COLUMN_PET_WEIGHT};
+                PetContract.PetEntry._ID,
+                PetContract.PetEntry.COLUMN_PET_NAME,
+                PetContract.PetEntry.COLUMN_PET_BREED,
+                PetContract.PetEntry.COLUMN_PET_GENDER,
+                PetContract.PetEntry.COLUMN_PET_WEIGHT};
 
-        // Perform a query on the pets table
-        Cursor cursor = db.query(
-                PetEntry.TABLE_NAME,   // The table to query
-                projection,            // The columns to return
-                null,                  // The columns for the WHERE clause
-                null,                  // The values for the WHERE clause
-                null,                  // Don't group the rows
-                null,                  // Don't filter by row groups
-                null);                   // The sort order
+
+        // Perform a query on the provider using the ContentResolver.
+        // Use the {@link PetEntry#CONTENT_URI} to access the pet data.
+        Cursor cursor = getContentResolver().query(
+                PetEntry.CONTENT_URI,   // The content URI of the words table
+                projection,             // The columns to return for each row
+                null,                   // Selection criteria
+                null,                   // Selection criteria
+                null);
 
         TextView displayView = (TextView) findViewById(R.id.text_view_pet);
 
@@ -102,18 +86,18 @@ public class CatalogActivity extends AppCompatActivity {
             // In the while loop below, iterate through the rows of the cursor and display
             // the information from each column in this order.
             displayView.setText("The pets table contains " + cursor.getCount() + " pets.\n\n");
-            displayView.append(PetEntry._ID + " - " +
-                    PetEntry.COLUMN_PET_NAME + " - " +
-                    PetEntry.COLUMN_PET_BREED + " - " +
-                    PetEntry.COLUMN_PET_GENDER + " - " +
-                    PetEntry.COLUMN_PET_WEIGHT + "\n");
+            displayView.append(PetContract.PetEntry._ID + " - " +
+                    PetContract.PetEntry.COLUMN_PET_NAME + " - " +
+                    PetContract.PetEntry.COLUMN_PET_BREED + " - " +
+                    PetContract.PetEntry.COLUMN_PET_GENDER + " - " +
+                    PetContract.PetEntry.COLUMN_PET_WEIGHT + "\n");
 
             // Figure out the index of each column
-            int idColumnIndex = cursor.getColumnIndex(PetEntry._ID);
-            int nameColumnIndex = cursor.getColumnIndex(PetEntry.COLUMN_PET_NAME);
-            int breedColumnIndex = cursor.getColumnIndex(PetEntry.COLUMN_PET_BREED);
-            int genderColumnIndex = cursor.getColumnIndex(PetEntry.COLUMN_PET_GENDER);
-            int weightColumnIndex = cursor.getColumnIndex(PetEntry.COLUMN_PET_WEIGHT);
+            int idColumnIndex = cursor.getColumnIndex(PetContract.PetEntry._ID);
+            int nameColumnIndex = cursor.getColumnIndex(PetContract.PetEntry.COLUMN_PET_NAME);
+            int breedColumnIndex = cursor.getColumnIndex(PetContract.PetEntry.COLUMN_PET_BREED);
+            int genderColumnIndex = cursor.getColumnIndex(PetContract.PetEntry.COLUMN_PET_GENDER);
+            int weightColumnIndex = cursor.getColumnIndex(PetContract.PetEntry.COLUMN_PET_WEIGHT);
 
             // Iterate through all the returned rows in the cursor
             while (cursor.moveToNext()) {
@@ -149,35 +133,28 @@ public class CatalogActivity extends AppCompatActivity {
         }
         return mGender;
     }
-
     /**
      * Helper method to insert hardcoded pet data into the database. For debugging purposes only.
      */
     private void insertPet() {
-        // Gets the database in write mode
-        SQLiteDatabase db = mDbHelper.getWritableDatabase();
 
         // Create a ContentValues object where column names are the keys,
         // and Toto's pet attributes are the values.
         ContentValues values = new ContentValues();
-        values.put(PetEntry.COLUMN_PET_NAME, "Toto");
-        values.put(PetEntry.COLUMN_PET_BREED, "Terrier");
-        values.put(PetEntry.COLUMN_PET_GENDER, PetEntry.GENDER_MALE);
-        values.put(PetEntry.COLUMN_PET_WEIGHT, 7);
+        values.put(PetContract.PetEntry.COLUMN_PET_NAME, "Toto");
+        values.put(PetContract.PetEntry.COLUMN_PET_BREED, "Terrier");
+        values.put(PetContract.PetEntry.COLUMN_PET_GENDER, PetContract.PetEntry.GENDER_MALE);
+        values.put(PetContract.PetEntry.COLUMN_PET_WEIGHT, 7);
 
-        // Insert a new row for Toto in the database, returning the ID of that new row.
-        // The first argument for db.insert() is the pets table name.
-        // The second argument provides the name of a column in which the framework
-        // can insert NULL in the event that the ContentValues is empty (if
-        // this is set to "null", then the framework will not insert a row when
-        // there are no values).
-        // The third argument is the ContentValues object containing the info for Toto.
-        long newRowId = db.insert(PetEntry.TABLE_NAME, null, values);
+        // Insert a new row for Toto into the provider using the ContentResolver.
+        // Use the {@link PetEntry#CONTENT_URI} to indicate that we want to insert
+        // into the pets database table.
+        // Receive the new content URI that will allow us to access Toto's data in the future.
+        Uri newUri = getContentResolver().insert(PetEntry.CONTENT_URI, values);
     }
 
     private void deletePet() {
-        SQLiteDatabase db = mDbHelper.getWritableDatabase();
-        db.delete(PetEntry.TABLE_NAME, null, null);
+        getContentResolver().delete(PetEntry.CONTENT_URI, null, null);
     }
 
     @Override

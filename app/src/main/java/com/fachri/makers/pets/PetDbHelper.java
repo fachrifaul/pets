@@ -1,10 +1,10 @@
-package com.example.android.pets;
+package com.fachri.makers.pets;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.example.android.pets.PetContract.PetEntry;
+import com.fachri.makers.pets.PetContract.PetEntry;
 
 public class PetDbHelper extends SQLiteOpenHelper {
 
