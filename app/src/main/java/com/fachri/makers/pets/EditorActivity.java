@@ -15,8 +15,6 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.fachri.makers.pets.PetContract.PetEntry;
-
 
 /**
  * Allows user to create a new pet or edit an existing one.
@@ -123,7 +121,7 @@ public class EditorActivity extends AppCompatActivity {
         values.put(PetContract.PetEntry.COLUMN_PET_WEIGHT, weight);
 
         // Insert a new pet into the provider, returning the content URI for the new pet.
-        Uri newUri = getContentResolver().insert(PetEntry.CONTENT_URI, values);
+        Uri newUri = getContentResolver().insert(PetContract.PetEntry.CONTENT_URI, values);
 
         // Show a toast message depending on whether or not the insertion was successful
         if (newUri == null) {
@@ -135,6 +133,13 @@ public class EditorActivity extends AppCompatActivity {
             Toast.makeText(this, getString(R.string.editor_insert_pet_successful),
                     Toast.LENGTH_SHORT).show();
         }
+
+        String title = "my pet name is " + nameString;
+        String description = "food: " + breedString +
+                " gender " + Utils.isGender(this, mGender) +
+                " weight:" + weightString;
+
+        Utils.showNotification(this, title, description);
     }
 
     @Override

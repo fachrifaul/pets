@@ -112,7 +112,7 @@ public class CatalogActivity extends AppCompatActivity {
                 displayView.append(("\n" + currentID + " - " +
                         currentName + " - " +
                         currentBreed + " - " +
-                        isGender(currentGender) + " - " +
+                        Utils.isGender(this, currentGender) + " - " +
                         currentWeight));
             }
         } finally {
@@ -122,17 +122,7 @@ public class CatalogActivity extends AppCompatActivity {
         }
     }
 
-    private String isGender(int selection) {
-        String mGender;
-        if (selection == PetEntry.GENDER_MALE) {
-            mGender = getString(R.string.gender_male);
-        } else if (selection == PetEntry.GENDER_FEMALE) {
-            mGender = getString(R.string.gender_female);
-        } else {
-            mGender = getString(R.string.gender_unknown);
-        }
-        return mGender;
-    }
+
     /**
      * Helper method to insert hardcoded pet data into the database. For debugging purposes only.
      */
@@ -151,6 +141,14 @@ public class CatalogActivity extends AppCompatActivity {
         // into the pets database table.
         // Receive the new content URI that will allow us to access Toto's data in the future.
         Uri newUri = getContentResolver().insert(PetEntry.CONTENT_URI, values);
+
+
+        String title = "My pet name is Toto";
+        String description = "food: Terrier" +
+                " gender " + Utils.isGender(this, PetContract.PetEntry.GENDER_MALE) +
+                " weight: " + 7;
+
+        Utils.showNotification(this, title, description);
     }
 
     private void deletePet() {
